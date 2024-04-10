@@ -22,6 +22,14 @@ type UserApi struct {
 	CreatedAt   time.Time `json:"created_at"`
 }
 
+type UserWithNoPassword struct {
+	UserID    int       `json:"id"`
+	Username  string    `json:"username"`
+	Email     string    `json:"email"`
+	CreatedAt time.Time `json:"created_at"`
+	Levelname string    `json:"level_name"`
+}
+
 func (User) TableName() string {
 	return "User"
 }
@@ -37,4 +45,10 @@ func GetUserByUserId(id int) (UserApi, error) {
 		CreatedAt:   user.CreatedAt,
 	}
 	return userApi, err
+}
+
+func GetUserInfoByUserName(username string) (User, error) {
+	var user User
+	err := dao.Db.Where("username = ?", username).First(&user).Error
+	return user, err
 }

@@ -29,6 +29,8 @@ func Router() *gin.Engine {
 
 	r.GET("/recipe", controllers.RecipeController{}.GetRecipeItems)
 
+	r.POST("/auth/login", controllers.LoginController{}.GetLoginResponse)
+
 	r.GET("/hello", func(ctx *gin.Context) {
 		ctx.String(http.StatusOK, "Hello Wolrd!")
 	})
