@@ -52,7 +52,8 @@ func JWTMiddleware() gin.HandlerFunc {
 		})
 
 		if err != nil {
-			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Invalid token"})
+			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Invalid token claims"})
+			logger.Info(map[string]interface{}{"jwt.ParseWithClaims err, err=": err})
 			return
 		}
 
@@ -62,7 +63,7 @@ func JWTMiddleware() gin.HandlerFunc {
 				c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Invalid token claims"})
 				return
 			}
-
+			logger.Info(map[string]interface{}{"userID": userID})
 			c.Set("user_id", int64(userID))
 		} else {
 			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Token is not valid"})

@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"recipe/config"
 	"recipe/controllers"
+	"recipe/pkg/jwtServer"
 	"recipe/pkg/logger"
 
 	"github.com/gin-contrib/cors"
@@ -31,7 +32,7 @@ func Router() *gin.Engine {
 
 	r.POST("/auth/login", controllers.LoginController{}.GetLoginResponse)
 
-	r.GET("/hello", func(ctx *gin.Context) {
+	r.GET("/hello", jwtServer.JWTMiddleware(), func(ctx *gin.Context) {
 		ctx.String(http.StatusOK, "Hello Wolrd!")
 	})
 
