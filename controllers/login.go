@@ -1,8 +1,10 @@
 package controllers
 
 import (
+	"net/http"
 	"recipe/models"
 	"recipe/pkg/jwtServer"
+	"recipe/pkg/logger"
 	"strconv"
 
 	"github.com/gin-contrib/sessions"
@@ -12,8 +14,18 @@ import (
 type LoginController struct{}
 
 func (l LoginController) GetLoginResponse(c *gin.Context) {
-	username := c.DefaultPostForm("username", "")
-	password := c.DefaultPostForm("password", "")
+	var loginReq models.LoginRequest
+	// 尝试绑定 JSON 请求体到 loginReq 结构体
+	if err := c.ShouldBindJSON(&loginReq); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	username := loginReq.Username
+	password := loginReq.Password
+	logger.Info(map[string]interface{}{"username:": username})
+	logger.Info(map[string]interface{}{"password:": password})
+
 	if username == "" || password == "" {
 		ReturnError(c, 4001, "请输入正确的信息")
 	}
