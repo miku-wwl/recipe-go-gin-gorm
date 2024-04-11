@@ -3,7 +3,9 @@ package controllers
 import (
 	"recipe/models"
 	"recipe/pkg/jwtServer"
+	"strconv"
 
+	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 )
 
@@ -25,9 +27,23 @@ func (l LoginController) GetLoginResponse(c *gin.Context) {
 		ReturnError(c, 4004, "用户名或密码不正确")
 		return
 	}
+	retToken := ""
+	session := sessions.Default(c)
+	if token, ok := session.Get(strconv.Itoa(user.UserID) + " :token").(string); ok {
+		retToken = token
+		// c.JSON(200, gin.H{"token": token})
+	} else {
+		// token不存在
+		newToken, err := jwtServer.CreateToken(int64(user.UserID))
+		retToken = newToken
+		if err != nil {
+			ReturnError(c, 4001, "创建token失败")
+			return
+		}
+		session.Set(strconv.Itoa(user.UserID)+" :token", retToken)
+		session.Save()
+	}
 
-	token, err := jwtServer.CreateToken(int64(user.UserID))
-	c.Set("token", token)
 	levelNames := map[int]string{
 		1: "admin",
 		2: "user",
@@ -35,7 +51,7 @@ func (l LoginController) GetLoginResponse(c *gin.Context) {
 	}
 
 	data := &models.LoginResponse{
-		Token:   token,
+		Token:   retToken,
 		Message: "登录成功并返回token成功",
 		User: models.UserWithNoPassword{
 			UserID:    user.UserID,
@@ -45,10 +61,5 @@ func (l LoginController) GetLoginResponse(c *gin.Context) {
 			Levelname: levelNames[user.UserLevelID],
 		},
 	}
-
-	if err == nil {
-		ReturnSuccess(c, 0, "success", data, 1)
-		return
-	}
-	ReturnError(c, 4001, "创建token失败")
+	ReturnSuccess(c, 0, "success", data, 1)
 }
