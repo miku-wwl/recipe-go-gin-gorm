@@ -10,7 +10,7 @@ type RecipeItem struct {
 	UserID      int       `json:"user_id"`
 	Filename    string    `json:"filename"`
 	Thumbnail   string    `json:"thumbnail"`
-	FileSize    int64     `json:"filesize"` // 在Go中，通常使用int64来表示文件大小
+	FileSize    int64     `json:"filesize" gorm:"column:filesize"` // 在Go中，通常使用int64来表示文件大小
 	MediaType   string    `json:"media_type"`
 	Title       string    `json:"title"`
 	Description *string   `json:"description,omitempty"` // 使用指针来表示可能为nil的字符串
