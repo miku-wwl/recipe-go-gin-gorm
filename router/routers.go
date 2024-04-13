@@ -28,7 +28,8 @@ func Router() *gin.Engine {
 		users.GET("/:id", controllers.UsersController{}.GetUserByUserId)
 		users.GET("/username/:username", controllers.UsersController{}.GetUsernameAvailable)
 		users.GET("/email/:email", controllers.UsersController{}.GetEmailAvailable)
-		users.POST("/", controllers.UsersController{}.PostUser)
+		// 这里必须是"", 不能是"/""
+		users.POST("", controllers.UsersController{}.PostUser)
 	}
 
 	r.GET("/recipe", controllers.RecipeController{}.GetRecipeItems)
