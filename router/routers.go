@@ -26,6 +26,9 @@ func Router() *gin.Engine {
 	users := r.Group("/users")
 	{
 		users.GET("/:id", controllers.UsersController{}.GetUserByUserId)
+		users.GET("/username/:username", controllers.UsersController{}.GetUsernameAvailable)
+		users.GET("/email/:email", controllers.UsersController{}.GetEmailAvailable)
+		users.POST("/", controllers.UsersController{}.PostUser)
 	}
 
 	r.GET("/recipe", controllers.RecipeController{}.GetRecipeItems)
