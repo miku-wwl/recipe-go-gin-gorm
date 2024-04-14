@@ -6,7 +6,7 @@ import (
 )
 
 type RecipeItem struct {
-	RecipeID    int       `json:"recipe_id"`
+	RecipeID    int       `json:"media_id"`
 	UserID      int       `json:"user_id"`
 	Filename    string    `json:"filename"`
 	Thumbnail   string    `json:"thumbnail"`

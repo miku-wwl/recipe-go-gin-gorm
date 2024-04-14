@@ -32,7 +32,7 @@ func Router() *gin.Engine {
 		users.POST("", controllers.UsersController{}.PostUser)
 	}
 
-	r.GET("/recipe", controllers.RecipeController{}.GetRecipeItems)
+	r.GET("/media", controllers.RecipeController{}.GetRecipeItems)
 
 	r.POST("/auth/login", controllers.LoginController{}.GetLoginResponse)
 
