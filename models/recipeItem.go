@@ -14,7 +14,7 @@ type RecipeItem struct {
 	MediaType   string    `json:"media_type"`
 	Title       string    `json:"title"`
 	Description *string   `json:"description,omitempty"` // 使用指针来表示可能为nil的字符串
-	Serving     int       `json:"serving"`
+	Serving     string    `json:"serving"`
 	CookTime    string    `json:"cook_time"`
 	Ingredients string    `json:"ingredients"`
 	Instruction string    `json:"instruction"`
