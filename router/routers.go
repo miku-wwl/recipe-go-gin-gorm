@@ -45,7 +45,12 @@ func Router() *gin.Engine {
 	r.GET("/media", controllers.RecipeController{}.GetRecipeItems)
 
 	r.POST("/auth/login", controllers.LoginController{}.GetLoginResponse)
-	r.POST("/upload", jwtServer.JWTMiddleware(), controllers.UploadController{}.UploadFiles)
+
+	upload := r.Group("/upload")
+	{
+		upload.POST("", jwtServer.JWTMiddleware(), controllers.UploadController{}.UploadFiles)
+		upload.POST("/media", jwtServer.JWTMiddleware(), controllers.UploadController{}.PostRecipe)
+	}
 
 	r.GET("/hello", jwtServer.JWTMiddleware(), func(ctx *gin.Context) {
 		ctx.String(http.StatusOK, "Hello Wolrd!")

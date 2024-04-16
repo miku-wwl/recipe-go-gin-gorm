@@ -16,7 +16,7 @@ type User struct {
 }
 
 type UserApi struct {
-	UserID      int       `json:"id"`
+	UserID      int       `json:"user_id"`
 	Username    string    `json:"username"`
 	Email       string    `json:"email"`
 	UserLevelID int       `json:"user_level_id"`
@@ -24,7 +24,7 @@ type UserApi struct {
 }
 
 type UserWithNoPassword struct {
-	UserID    int       `json:"id"`
+	UserID    int       `json:"user_id"`
 	Username  string    `json:"username"`
 	Email     string    `json:"email"`
 	CreatedAt time.Time `json:"created_at"`
