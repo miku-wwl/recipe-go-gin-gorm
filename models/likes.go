@@ -60,3 +60,9 @@ func GetUserLike(mediaId int, userId int) (Like, error) {
 	err := dao.Db.Where("media_id = ?", mediaId).Where("user_id = ?", userId).First(&like).Error
 	return like, err
 }
+
+func GetLikeListByMediaId(mediaId int) ([]Like, error) {
+	var likeLists []Like
+	err := dao.Db.Where("media_id = ?", mediaId).Find(&likeLists).Error
+	return likeLists, err
+}

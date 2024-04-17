@@ -90,3 +90,16 @@ func (l LikesController) GetUserLike(c *gin.Context) {
 
 	ReturnSuccess(c, 0, "success", like, 1)
 }
+
+func (l LikesController) GetLikeListByMediaId(c *gin.Context) {
+	mediaIdStr := c.Param("media_id")
+	mediaId, _ := strconv.Atoi(mediaIdStr)
+
+	likeList, err := models.GetLikeListByMediaId(mediaId)
+	if err != nil {
+		ReturnError(c, 4001, "获取LikeList失败, errMsg="+err.Error())
+		return
+	}
+
+	ReturnSuccess(c, 0, "success", likeList, 1)
+}

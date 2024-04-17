@@ -58,6 +58,7 @@ func Router() *gin.Engine {
 		likes.POST("/user", jwtServer.JWTMiddleware(), controllers.LikesController{}.GetUserLike)
 		likes.DELETE("/:like_id", jwtServer.JWTMiddleware(), controllers.LikesController{}.DeleteLike)
 		likes.GET("/count/:media_id", controllers.LikesController{}.GetCountByMediaId)
+		likes.GET("/media/:media_id", controllers.LikesController{}.GetLikeListByMediaId)
 	}
 	r.GET("/hello", jwtServer.JWTMiddleware(), func(ctx *gin.Context) {
 		ctx.String(http.StatusOK, "Hello Wolrd!")
