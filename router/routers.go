@@ -64,6 +64,13 @@ func Router() *gin.Engine {
 		ctx.String(http.StatusOK, "Hello Wolrd!")
 	})
 
+	// TODO 需要新增校验user_id 和 token是否想匹配
+	comments := r.Group("/comments")
+	{
+		comments.POST("", jwtServer.JWTMiddleware(), controllers.CommentsController{}.PostComment)
+		comments.GET("/media/:media_id", controllers.CommentsController{}.GetCommentsListByMediaId)
+	}
+
 	return r
 
 }
