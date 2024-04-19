@@ -69,6 +69,8 @@ func Router() *gin.Engine {
 	{
 		comments.POST("", jwtServer.JWTMiddleware(), controllers.CommentsController{}.PostComment)
 		comments.GET("/media/:media_id", controllers.CommentsController{}.GetCommentsListByMediaId)
+		comments.DELETE("/:comment_id", jwtServer.JWTMiddleware(), controllers.CommentsController{}.DeleteCommentById)
+		comments.PUT("/:comment_id", jwtServer.JWTMiddleware(), controllers.CommentsController{}.UpdateCommentById)
 	}
 
 	return r

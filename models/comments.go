@@ -15,6 +15,14 @@ type PostCommentResponse struct {
 	Message string `json:"message"`
 }
 
+type DeleteCommentResponse struct {
+	Message string `json:"message"`
+}
+
+type UpdateCommentRequest struct {
+	CommentText string `json:"comment_text"  binding:"required"`
+}
+
 type Comment struct {
 	CommentId   int       `json:"comment_id" gorm:"primaryKey" ` // 使用 gorm 的标签来指定主键
 	MediaId     int       `json:"media_id"`
@@ -36,4 +44,21 @@ func GetCommentsListByMediaId(mediaId int) ([]Comment, error) {
 	var commentList []Comment
 	err := dao.Db.Where("media_id = ?", mediaId).Find(&commentList).Error
 	return commentList, err
+}
+
+func DeleteCommentById(CommentId int) error {
+	var comment Comment
+	err := dao.Db.Where("comment_id = ?", CommentId).Delete(&comment).Error
+	return err
+}
+
+func UpdateCommentById(CommentId int, CommentText string) error {
+	// 使用结构体来定义你想要更新的字段和新的值
+	var data = map[string]string{
+		"comment_text": CommentText, 
+	}
+
+	// 使用gorm的 Where 和 Updates 方法来更新记录
+	err := dao.Db.Model(&Comment{}).Where("comment_id = ?", CommentId).Updates(data).Error
+	return err
 }

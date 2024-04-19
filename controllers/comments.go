@@ -52,3 +52,42 @@ func (com CommentsController) GetCommentsListByMediaId(c *gin.Context) {
 
 	ReturnSuccess(c, 0, "success", commentList, 1)
 }
+
+func (com CommentsController) DeleteCommentById(c *gin.Context) {
+	CommentIdStr := c.Param("comment_id")
+	CommentId, _ := strconv.Atoi(CommentIdStr)
+	err := models.DeleteCommentById(CommentId)
+
+	if err != nil {
+		ReturnError(c, 4001, "删除Comment失败, errMsg="+err.Error())
+		return
+	}
+
+	deleteLikeResponse := &models.DeleteCommentResponse{
+		Message: "Comment 删除成功",
+	}
+	ReturnSuccess(c, 0, "success", deleteLikeResponse, 1)
+}
+
+func (com CommentsController) UpdateCommentById(c *gin.Context) {
+	CommentIdStr := c.Param("comment_id")
+	CommentId, _ := strconv.Atoi(CommentIdStr)
+	var updateCommentReq models.UpdateCommentRequest
+	// 尝试绑定 JSON 请求体到 postCommentReq 结构体
+	if err := c.ShouldBindJSON(&updateCommentReq); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	err := models.UpdateCommentById(CommentId, updateCommentReq.CommentText)
+
+	if err != nil {
+		ReturnError(c, 4001, "更新Comment失败, errMsg="+err.Error())
+		return
+	}
+
+	deleteLikeResponse := &models.DeleteCommentResponse{
+		Message: "Comment 更新成功",
+	}
+	ReturnSuccess(c, 0, "success", deleteLikeResponse, 1)
+}
